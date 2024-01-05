@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "609833610754",
+    "project_id": "minimal-social-app-195dd",
+    "storage_bucket": "minimal-social-app-195dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609833610754:android:8454c7fafddf305758411b",
+        "android_client_info": {
+          "package_name": "com.example.minimal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRmWE7EGbmv0eM9WPHSaZPzAWo0HCbWDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
