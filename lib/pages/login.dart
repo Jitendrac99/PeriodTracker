@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:periods/components/my_button.dart';
-import 'package:periods/components/my_textfield.dart';
 import 'package:periods/pages/dashboard.dart';
 import 'package:periods/pages/register.dart';
+
+import '../Firebase_auth.dart';
+import '../Form_controller.dart';
 class login extends StatefulWidget {
   login({super.key});
 
@@ -14,6 +17,7 @@ class login extends StatefulWidget {
 }
 class _loginState extends State<login> {
 //text controllers
+  final FirebaseAuthService _auth = FirebaseAuthService();
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
 
@@ -38,17 +42,15 @@ void login(){}
 
              SizedBox(height: 25,),
              //textfield for email
-             MyTextField(
-                  hintText: "Email",
-                  obscuretext: false,
-                  controller: emailcontroller
+              FormContainerWidget(
+                hintText: "Enter email",
+                controller: emailcontroller,
               ),
               SizedBox(height: 10),
               //textfield for password
-              MyTextField(
-                  hintText: "Password",
-                  obscuretext: true,
-                  controller: passwordcontroller
+              FormContainerWidget(
+                hintText: "Enter password",
+                controller: passwordcontroller,
               ),
               SizedBox(height: 10,),
               Row(
@@ -64,10 +66,7 @@ void login(){}
               MyButton(
                   text: "Login",
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return dash();
-                    }));
-
+                    return _signin();
                   },
               ),
               SizedBox(height: 25,),
@@ -100,6 +99,24 @@ void login(){}
         ),
       ),
     );
+  }
+  void _signin()async{
+
+    String password =passwordcontroller.text;
+    String email = emailcontroller.text;
+
+    User? user = await _auth.signin(email, password);
+
+    if (user!= null){
+      print("User is sucessfully lggged in");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => dash()),
+      );
+    }
+    else{
+      print("Error");
+    }
   }
 }
 

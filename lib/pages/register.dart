@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:periods/components/my_button.dart';
-import 'package:periods/components/my_textfield.dart';
 import 'package:periods/pages/login.dart';
+
+import '../Firebase_auth.dart';
+import '../Form_controller.dart';
 class register extends StatefulWidget {
   register({super.key,});
 
@@ -11,10 +14,12 @@ class register extends StatefulWidget {
 }
 class _loginState extends State<register> {
 //text controllers
+
   final TextEditingController usernamecontroller = TextEditingController();
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
   final TextEditingController confirmpasswordcontroller = TextEditingController();
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
   //register method
   void main(){}
@@ -36,37 +41,34 @@ class _loginState extends State<register> {
 
               SizedBox(height: 25,),
               //textfield for email
-              MyTextField(
-                  hintText: "Username",
-                  obscuretext: false,
-                  controller: emailcontroller
+              FormContainerWidget(
+                hintText: "Enter name",
+                controller: usernamecontroller,
               ),
               SizedBox(height: 10),
 
-              MyTextField(
-                  hintText: "Email",
-                  obscuretext: false,
-                  controller: emailcontroller
+              FormContainerWidget(
+                hintText: "Enter Email",
+                controller: emailcontroller,
               ),
               SizedBox(height: 10),
 
               //textfield for password
-              MyTextField(
-                  hintText: "Password",
-                  obscuretext: true,
-                  controller: passwordcontroller
+              FormContainerWidget(
+                hintText: "Enter password",
+                controller: passwordcontroller,
               ),
               SizedBox(height: 10,),
-              MyTextField(
-                  hintText: "Confirm Passoword",
-                  obscuretext: true,
-                  controller: passwordcontroller
+              FormContainerWidget(
+                hintText: "Confirm password",
+                controller: confirmpasswordcontroller,
               ),
 
               SizedBox(height: 25,),
               MyButton(
                 text: "Login",
                 onTap: (){
+                  return _signup();
 
                 },
               ),
@@ -98,6 +100,25 @@ class _loginState extends State<register> {
         ),
       ),
     );
+  }
+  void _signup()async{
+    String password =passwordcontroller.text;
+    String  firstname =usernamecontroller.text;
+    String email = emailcontroller.text;
+
+    User? user = await _auth.signup(email,password,firstname);
+
+    if (user!= null){
+      print("User is sucessfully created");
+      print(FirebaseAuth.instance);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => login()),
+      );
+    }
+    else{
+      print("Error");
+    }
   }
 }
 

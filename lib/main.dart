@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:periods/pages/dashboard.dart';
 import "package:periods/pages/login.dart";
@@ -5,8 +6,16 @@ import 'package:periods/pages/register.dart';
 import 'package:periods/pages/settings.dart';
 import 'package:periods/pages/splash_screen.dart';
 
-void main() {
+void main()async{
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(apiKey: "AIzaSyCoPFKOysCwp8lbAJAGkonPa_myl7lJpfc",
+          appId: "1:516775553288:android:ec0af1dcef5417f34ee4bd",
+          messagingSenderId: "516775553288",
+          projectId: "femeeflow"
+      )
+  );
   runApp(const MyApp());
 }
 

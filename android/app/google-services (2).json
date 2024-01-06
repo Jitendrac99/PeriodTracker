@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "609833610754",
-    "project_id": "minimal-social-app-195dd",
-    "storage_bucket": "minimal-social-app-195dd.appspot.com"
+    "project_number": "516775553288",
+    "project_id": "femeeflow",
+    "storage_bucket": "femeeflow.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:609833610754:android:8454c7fafddf305758411b",
+        "mobilesdk_app_id": "1:516775553288:android:ec0af1dcef5417f34ee4bd",
         "android_client_info": {
           "package_name": "com.example.minimal"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDRmWE7EGbmv0eM9WPHSaZPzAWo0HCbWDg"
+          "current_key": "AIzaSyCoPFKOysCwp8lbAJAGkonPa_myl7lJpfc"
         }
       ],
       "services": {

@@ -13,13 +13,13 @@ class _homeState extends State<home>{
   //creating a list full of data that will be used in the barchart.
 
   List<double> weeklySummery=[
-    29,
-    30,
-    32,
-    43,
-    22,
-    41,
-    28,
+    49,
+    50,
+    52,
+    63,
+    42,
+    61,
+    48,
   ];
 
 
@@ -27,8 +27,9 @@ class _homeState extends State<home>{
   Widget build(BuildContext context){
     return Scaffold(
       body: Center(
-        child: SizedBox(
-            height: 220,
+        child: Container(
+          color: Color.fromRGBO(250, 242, 232, 1),
+            height: 228,
             child: MyBarGraph(
               weeklySummary: weeklySummery,
             )
