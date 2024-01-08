@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:periods/components/my_button.dart';
 import 'package:periods/pages/dashboard.dart';
+import 'package:periods/pages/password.dart';
 import 'package:periods/pages/register.dart';
 
 import '../Firebase_auth.dart';
@@ -27,7 +28,7 @@ void login(){}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(253, 213, 200, 1),
+      backgroundColor: Color.fromRGBO(253, 213, 200, 1),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25),
@@ -38,7 +39,8 @@ void login(){}
                 'assets/images/logo.png',
                 width: 350,
                 height: 150,
-                  color: Theme.of(context).colorScheme.primary,),
+                  color: Color.fromRGBO(255, 129, 149, 1)
+              ),
 
              SizedBox(height: 25,),
              //textfield for email
@@ -56,11 +58,19 @@ void login(){}
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("Forgot password?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary),),
-                ],
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return Pass();
+                      }));
+                    },
+                    child: Text("Forgot password?",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(255, 129, 149, 1)
+                      ),
+                    ),
+                  )],
               ),
               SizedBox(height: 25,),
               MyButton(
@@ -85,7 +95,8 @@ void login(){}
                       child: Text(" Register Here",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary),
+                            color: Color.fromRGBO(255, 129, 149, 1),
+                        )
                       )
                   ),
                 ],
@@ -107,16 +118,47 @@ void login(){}
 
     User? user = await _auth.signin(email, password);
 
-    if (user!= null){
-      print("User is sucessfully lggged in");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => dash()),
+    if (user != null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Success"),
+            content: Text("User is successfully logged in"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => dash()),
+                  );
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Login failed"),
+            content: Text("Please check your email and password and try again."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
       );
     }
-    else{
-      print("Error");
-    }
+
   }
 }
 

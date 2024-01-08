@@ -36,7 +36,8 @@ class _loginState extends State<register> {
             children: [
               Image.asset(
                 'assets/images/logo.png',
-                color: Theme.of(context).colorScheme.primary,),
+                color: Color.fromRGBO(255, 129, 149, 1)
+              ),
               SizedBox(height: 25,),
 
               SizedBox(height: 25,),
@@ -66,7 +67,7 @@ class _loginState extends State<register> {
 
               SizedBox(height: 25,),
               MyButton(
-                text: "Login",
+                text: "Register",
                 onTap: (){
                   return _signup();
 
@@ -89,7 +90,8 @@ class _loginState extends State<register> {
                       child: Text(" Login Here",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary),))
+                            color: Color.fromRGBO(255, 129, 149, 1)
+                      ),))
                 ],
               ),
 
@@ -108,16 +110,45 @@ class _loginState extends State<register> {
 
     User? user = await _auth.signup(email,password,firstname);
 
-    if (user!= null){
-      print("User is sucessfully created");
-      print(FirebaseAuth.instance);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => login()),
+    if (user != null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Success"),
+            content: Text("User is successfully registered"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => login()),
+                  );
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
       );
-    }
-    else{
-      print("Error");
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Registration failed"),
+            content: Text("Please check your credintial and try again."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

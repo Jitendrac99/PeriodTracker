@@ -10,7 +10,7 @@ class home extends StatefulWidget{
 
 class _homeState extends State<home>{
 
-  //creating a list full of data that will be used in the barchart.
+  //creating a list full of data that will be used in the bar
 
   List<double> weeklySummery=[
     49,

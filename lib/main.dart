@@ -2,9 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:periods/pages/dashboard.dart';
 import "package:periods/pages/login.dart";
-import 'package:periods/pages/register.dart';
-import 'package:periods/pages/settings.dart';
-import 'package:periods/pages/splash_screen.dart';
 
 void main()async{
 
@@ -33,7 +30,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
         useMaterial3: true,
       ),
-      home: login(),
+      home:  login(),
     );
   }
 }
