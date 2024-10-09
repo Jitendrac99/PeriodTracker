@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:periods/pages/Intro1.dart';
 import 'package:periods/pages/dashboard.dart';
 import "package:periods/pages/login.dart";
 
@@ -26,11 +27,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
-        useMaterial3: true,
       ),
-      home:  login(),
+      home:  Intro1(),
     );
   }
 }

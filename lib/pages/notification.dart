@@ -1,13 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:periods/pages/period_data.dart';
+import '../Email.dart';
+import '../MyUsers.dart';
+
 class notify extends StatefulWidget {
+
+
   const notify({super.key});
 
   @override
   State<notify> createState() => _notifyState();
 }
+Future<String?> getEmail() async {
+  var userdata = MyEmail().getCurrentUser();
+  DocumentSnapshot doc =
+  await FirebaseFirestore.instance.collection("User").doc(userdata.uid).get();
+
+  if (doc.exists) {
+    final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+    if (data != null && data['email'] != null) {
+      return data['email'];
+    }
+  }
+  return null;
+}
+
+Future<String?> getUsername() async {
+  var userdata = MyUser().getCurrentUser();
+  DocumentSnapshot doc =
+  await FirebaseFirestore.instance.collection("User").doc(userdata.uid).get();
+
+  if (doc.exists) {
+    final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+    if (data != null && data['user_name'] != null) {
+      return data['user_name'];
+    }
+  }
+  return null;
+}
 
 class _notifyState extends State<notify> {
+
+  late int daysLeftForCurrentPeriod;
+  late int daysLeftForNextPeriod;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize state from singleton values
+    daysLeftForCurrentPeriod = PeriodData().daysUntilPeriodEnds;
+    daysLeftForNextPeriod = PeriodData().daysUntilNextPeriod;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,241 +67,117 @@ class _notifyState extends State<notify> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
-                height: 100,
-                width: 380,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Container(
+                height: 300,
+                width: 400,
                 child: Stack(
                   children: [
                     Positioned(
-                      top: 4,
-                        right: 20,
-                        child: Text("08/01/2024")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(CupertinoIcons.drop,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("Your periods is expected to",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("start after 9 days.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-
+                        top: 0,
+                        left: 0,
+                        child: Container(
+                          height: 300,
+                          width: 400,
+                          child: Lottie.asset('assets/Animation/bell.json'),
+                        )
+                    ),
                   ],
                 ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
-                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
+              Container(
                 height: 100,
-                width: 380,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 4,
-                        right: 20,
-                        child: Text("08/01/2024")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(CupertinoIcons.info,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("Some yoga postures can",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("ease periods cramps.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
+                width: 360,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.white),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FutureBuilder<String?>(
+                      future: getUsername(), // Replace with the actual user ID
+                      builder: (context, usernameSnapshot) {
+                        if (usernameSnapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (usernameSnapshot.hasError) {
+                          return Text('Error: ${usernameSnapshot.error}');
+                        } else if (usernameSnapshot.hasData) {
+                          return Text(
+                            'Hello, ${usernameSnapshot.data} welcome to Period Tracker hope you enjoy your stay.',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black),
+                          );
+                        } else {
+                          return Text('No username available');
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
+              SizedBox(
+                height: 20,
+              ),
+              Container(
                 height: 100,
-                width: 380,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 4,
-                        right: 20,
-                        child: Text("04/01/2024")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(CupertinoIcons.smiley,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("Feel free to give us",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("a feedback.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
+                width: 360,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(child: Text('We would like to notify you that your periods may start in the period of $daysLeftForNextPeriod days')),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
+              SizedBox(
+                height: 20,
+              ),
+              Container(
                 height: 100,
-                width: 380,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 4,
-                        right: 20,
-                        child: Text("08/01/2024")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(CupertinoIcons.lightbulb,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("Want to know more about",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("menstural cycle?.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
+                width: 360,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(child: Text('We would like to notify you that your periods may end within $daysLeftForCurrentPeriod days')),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
+              SizedBox(
+                height: 20,
+              ),
+              Container(
                 height: 100,
-                width: 380,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 4,
-                        right: 20,
-                        child: Text("28/11/2023")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(CupertinoIcons.drop,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("Your periods is expected to",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("start after 10 days.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
-                height: 100,
-                width: 380,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 4,
-                        right: 20,
-                        child: Text("08/01/2023")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(CupertinoIcons.profile_circled,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("You have been logged in",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("as Nikisha Joshi.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
+                width: 360,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.white),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: FutureBuilder<String?>(
+                        future: getEmail(), // Replace with the actual user ID
+                        builder: (context, usernameSnapshot) {
+                          if (usernameSnapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (usernameSnapshot.hasError) {
+                            return Text('Error: ${usernameSnapshot.error}');
+                          } else if (usernameSnapshot.hasData) {
+                            return Text(
+                              'You have been logged in into the Period Tracker application with the email ${usernameSnapshot.data}',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black),
+                            );
+                          } else {
+                            return Text('No username available');
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
-                height: 100,
-                width: 380,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 4,
-                        right: 20,
-                        child: Text("06/01/2023")),
-                    Positioned(
-                        top: 30,
-                        left: 20,
-                        child: Icon(Icons.emoji_food_beverage_outlined,color: Colors.red,size: 40,)),
-                    Positioned(
-                        top: 30,
-                        left: 80,
-                        child: Text("Healthy diet can improve",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
-                    Positioned(
-                        top: 60,
-                        left: 80,
-                        child: Text("health.",style: TextStyle(color: Colors.redAccent,fontSize: 20),)),
 
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    color:Color.fromRGBO(250, 238, 209,1),
-                    borderRadius: BorderRadius.circular(20)
-
-                ),
-              ),
-            ),
-
-          ],
+            ],
+          ),
         ),
       ),
     );

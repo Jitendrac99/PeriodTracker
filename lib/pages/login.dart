@@ -9,10 +9,6 @@ import '../Firebase_auth.dart';
 import '../Form_controller.dart';
 class login extends StatefulWidget {
   login({super.key});
-
-   //login method
-
-
   @override
   State<login> createState() => _loginState();
 }
@@ -28,56 +24,74 @@ void login(){}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(253, 213, 200, 1),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.all(0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 350,
-                height: 150,
-                  color: Color.fromRGBO(255, 129, 149, 1)
+              Container(
+                height: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(120)),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/tree1.png"),
+                        fit: BoxFit.cover
+                    ),
+                    color: Colors.grey),
               ),
 
              SizedBox(height: 25,),
              //textfield for email
-              FormContainerWidget(
-                hintText: "Enter email",
-                controller: emailcontroller,
+              Padding(
+                padding: const EdgeInsets.only(left: 20,right: 20),
+                child: FormContainerWidget(
+                  hintText: "Enter email",
+                  controller: emailcontroller,
+                ),
               ),
               SizedBox(height: 10),
               //textfield for password
-              FormContainerWidget(
-                hintText: "Enter password",
-                controller: passwordcontroller,
+              Padding(
+                padding: const EdgeInsets.only(left: 20,right: 20),
+                child: FormContainerWidget(
+                  hintText: "Enter password",
+                  controller: passwordcontroller,
+                  isPasswordField: true,
+                ),
               ),
               SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return Pass();
-                      }));
-                    },
-                    child: Text("Forgot password?",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(255, 129, 149, 1)
+              Padding(
+                padding: const EdgeInsets.only(right: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return Pass();
+                        }));
+                      },
+                      child: Text("Forgot password?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                            color: Color.fromRGBO(255, 129, 149, 1)
+                        ),
                       ),
-                    ),
-                  )],
+                    )],
+                ),
               ),
               SizedBox(height: 25,),
-              MyButton(
-                  text: "Login",
-                  onTap: (){
-                    return _signin();
-                  },
+              Padding(
+                padding: const EdgeInsets.only(left: 25,right: 25),
+                child: MyButton(
+                    text: "Login",
+                    onTap: (){
+                      return _signin();
+                    },
+                ),
               ),
               SizedBox(height: 25,),
               Row(

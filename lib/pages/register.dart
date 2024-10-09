@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:periods/components/my_button.dart';
 import 'package:periods/pages/login.dart';
-
+import 'package:lottie/lottie.dart';
 import '../Firebase_auth.dart';
 import '../Form_controller.dart';
 class register extends StatefulWidget {
@@ -19,6 +19,9 @@ class _loginState extends State<register> {
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
   final TextEditingController confirmpasswordcontroller = TextEditingController();
+  final TextEditingController Height = TextEditingController();
+  final TextEditingController Weight = TextEditingController();
+  final TextEditingController Age = TextEditingController();
   final FirebaseAuthService _auth = FirebaseAuthService();
 
   //register method
@@ -27,17 +30,16 @@ class _loginState extends State<register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(253, 213, 200, 1),
+
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/images/logo.png',
-                color: Color.fromRGBO(255, 129, 149, 1)
-              ),
+
               SizedBox(height: 25,),
 
               SizedBox(height: 25,),
@@ -63,6 +65,19 @@ class _loginState extends State<register> {
               FormContainerWidget(
                 hintText: "Confirm password",
                 controller: confirmpasswordcontroller,
+              ),
+              SizedBox(height: 10,),
+              FormContainerWidget(
+                hintText: "Height in cm",
+                controller: Height,
+              ),SizedBox(height: 10,),
+              FormContainerWidget(
+                hintText: "Weight",
+                controller: Weight,
+              ),SizedBox(height: 10,),
+              FormContainerWidget(
+                hintText: "Age",
+                controller: Age,
               ),
 
               SizedBox(height: 25,),
@@ -94,7 +109,13 @@ class _loginState extends State<register> {
                       ),))
                 ],
               ),
+              Container(
+                height: 200,
+                width: 200,
+                child: Lottie.asset('assets/Animation/cat2.json'),
 
+              ),
+              SizedBox(height: 50,),
 
             ],
 
@@ -107,8 +128,11 @@ class _loginState extends State<register> {
     String password =passwordcontroller.text;
     String  firstname =usernamecontroller.text;
     String email = emailcontroller.text;
+    String height = Height.text;
+    String weight = Weight.text;
+    String age = Age.text;
 
-    User? user = await _auth.signup(email,password,firstname);
+    User? user = await _auth.signup(email,password,firstname,height,weight,age);
 
     if (user != null) {
       showDialog(

@@ -1,10 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:periods/pages/period_data.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:toggle_switch/toggle_switch.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-
 import '../pages/dashboard.dart';
-import '../pages/notification.dart';
 import '../pages/profile.dart';
 
 class calendar extends StatefulWidget {
@@ -15,325 +13,324 @@ class calendar extends StatefulWidget {
 }
 
 class _CaleState extends State<calendar> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-  DateTime? _startRange;
-  DateTime? _endRange;
-  String cat = "";
+  bool light = true;
+  DateTime _selectedDay = DateTime.now();
+  bool _isPeriodStarted = false;
+  double _currentSliderValue = 20;
 
-  void initState() {
-    super.initState();
-    _selectedDay = _focusedDay;
+  static const int cycleLength = 28; // Average period cycle length in days
+  static const int periodLength = 5;  // Average period duration in days
+  String selectedMood = '😊'; // Default mood
+
+  // A list of mood emojis
+  final List<String> moods = ['😊', '😔', '😠', '😎', '🥳', '😢'];
+
+  void _navigateToInfoPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => dash(),
+      ),
+    );
   }
 
-  void _onSelectedDay(DateTime? selectedDay, DateTime? focusedDay) {
-    if (isSameDay(_selectedDay, selectedDay)) {
-      setState(() {
-        _selectedDay = selectedDay;
-      });
-    }
+  @override
+  void dispose() {
+    super.dispose();
   }
 
-  void _onRangeSelected(
-      DateTime? start, DateTime? end, DateTime? focusedDay) {
+  void _startPeriod() {
     setState(() {
-      _selectedDay = null;
-      _startRange = start;
-      _endRange = end;
-      cat = (_startRange?.day).toString();
-      print(cat);
-      print(_endRange);
+      _isPeriodStarted = true;
+
+      DateTime today = DateTime.now();
+      int differenceInDays = today.difference(_selectedDay).inDays;
+
+      // Update the singleton values
+      PeriodData().daysUntilNextPeriod = cycleLength - (differenceInDays % cycleLength);
+      PeriodData().daysUntilPeriodEnds = periodLength - (differenceInDays % periodLength);
+
+      // Ensure days do not go negative
+      if (PeriodData().daysUntilPeriodEnds < 0) {
+        PeriodData().daysUntilPeriodEnds = 0; // In case the period end has passed already
+      }
+    });
+  }
+
+  void _endPeriod() {
+    setState(() {
+      _isPeriodStarted = false;
+      PeriodData().reset(); // Reset the singleton data
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Calendar"),
-        automaticallyImplyLeading: false,
-        backgroundColor: Color.fromRGBO(253, 213, 200, 1),
-      ),
       body: Container(
-        color: Color.fromRGBO(253, 213, 200, 1),
+        color: Colors.white,
         height: double.infinity,
         width: double.infinity,
 
         child: Stack(
           children: [
-            SizedBox(
-              height: 50,
-            ),
-
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
+                    SizedBox(
+                      height: 70,
+                    ),
+                    // Calendar Widget
                     Container(
-                      height: 340,
-                      width: 400,
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2010, 10, 10),
-                        lastDay: DateTime.utc(2030, 10, 10),
-                        focusedDay: _focusedDay,
-                        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                        rowHeight: 43,
-                        rangeSelectionMode: RangeSelectionMode.toggledOn,
-                        onRangeSelected: _onRangeSelected,
-                        startingDayOfWeek: StartingDayOfWeek.sunday,
-                        onDaySelected: _onSelectedDay,
-                        rangeStartDay: _startRange,
-                        rangeEndDay: _endRange,
-                        calendarStyle: CalendarStyle(
-                          outsideDaysVisible: false,
+                      height: MediaQuery.of(context).size.height * 0.55,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(34),
+                                color: Color.fromRGBO(236, 153, 153, 10),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            right: 10,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white,
+                              ),
+                              child: TableCalendar(
+                                focusedDay: _selectedDay,
+                                firstDay: DateTime(2000),
+                                lastDay: DateTime(2100),
+                                selectedDayPredicate: (day) {
+                                  return isSameDay(_selectedDay, day);
+                                },
+                                onDaySelected: _isPeriodStarted ? null : (selectedDay, focusedDay) {
+                                  setState(() {
+                                    _selectedDay = selectedDay;
+                                  });
+                                },
+                                calendarFormat: CalendarFormat.month,
+                                availableGestures: AvailableGestures.all,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 15,
+                            left: 30,
+                            right: 30,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const SizedBox(width: 110),
+                                const Text(
+                                  'Start Period',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Switch(
+                                  value: _isPeriodStarted,
+                                  onChanged: (bool value) {
+                                    if (!_isPeriodStarted) {
+                                      _startPeriod();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    if (_isPeriodStarted)
+                      Column(
+                        children: [
+
+                        ],
+                      )
+                    else
+                      const Text(
+                        'Press the switch to start tracking your period',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    SizedBox(height: 40,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text("cramps"),
+                                Switch(
+                                // This bool value toggles the switch.
+                                value: light,
+                                activeColor: Colors.green,
+                                onChanged: (bool value) {
+                                // This is called when the user toggles the switch.
+                                setState(() {
+                                light = value;
+                                });
+                                },
+                                ),
+                              ],
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color.fromRGBO(236, 153, 153, 10),
+                          ),
                         ),
-                        onFormatChanged: (format) {
-                          setState(() {
-                            _calendarFormat = format;
-                          });
-                        },
-                        onPageChanged: (focusedDay) {
-                          _focusedDay = focusedDay;
-                        },
+                        Container(
+                          height: 100,
+                          width: 240,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text("Flow Intensity"),
+                              Slider(
+                              value: _currentSliderValue,
+                              max: 100,
+                              divisions: 5,
+                              label: _currentSliderValue.round().toString(),
+                              onChanged: (double value) {
+                              setState(() {
+                              _currentSliderValue = value;
+                              });
+                              },
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color.fromRGBO(236, 153, 153, 10)
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 40,),
+                    Container(
+                      height: 300,
+                      width: double.infinity,
+                      color: Color.fromRGBO(236, 153, 153, 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Select your mood:',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            selectedMood,
+                            style: TextStyle(fontSize: 50), // Display selected mood
+                          ),
+                          SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: moods.map((mood) {
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedMood = mood;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    mood,
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
-                      decoration: BoxDecoration(
-                          color:Color.fromRGBO(255, 129, 149, 1)
-                          , borderRadius: BorderRadius.circular(30)),
                     ),
 
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 70,
-                      width: 395,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(250, 242, 232, 1),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              "End period",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(249, 71, 108, 1),
-                                  fontSize: 18),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ToggleSwitch(
-                              minWidth: 60,
-                              activeBgColor: [Color.fromRGBO(249, 71, 108, 1)],
-                              inactiveBgColor: Color.fromRGBO(253, 213, 200, 1),
-                              initialLabelIndex: 0,
-                              totalSwitches: 2,
-                              labels: ["Yes", "No"],
-                              onToggle: (index) {
-                                print('switched to: $index');
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 70,
-                      width: 395,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(250, 242, 232, 1),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              "Cramps",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(249, 71, 108, 1),
-                                  fontSize: 18),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ToggleSwitch(
-                              minWidth: 60,
-                              activeBgColor: [Color.fromRGBO(249, 71, 108, 1)],
-                              inactiveBgColor: Color.fromRGBO(253, 213, 200, 1),
-                              initialLabelIndex: 0,
-                              totalSwitches: 2,
-                              labels: ["Yes", "No"],
-                              onToggle: (index) {
-                                print('switched to: $index');
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 70,
-                      width: 395,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(250, 242, 232, 1),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              " Flow Intensity",
-                              style: TextStyle(
-                                  color: Color.fromRGBO(249, 71, 108, 1),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ToggleSwitch(
-                              minWidth: 50,
-                              activeBgColor: [Color.fromRGBO(249, 71, 108, 1)],
-                              inactiveBgColor: Color.fromRGBO(253, 213, 200, 1),
-                              initialLabelIndex: 0,
-                              totalSwitches: 3,
-                              labels: ['L', 'M', 'H'],
-                              onToggle: (index) {
-                                print('switched to: $index');
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 70,
-                      width: 395,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(250, 242, 232, 1),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              "Mood",
-                              style: TextStyle(
-                                  color: Color.fromRGBO(249, 71, 108, 1),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ToggleSwitch(
-                              minWidth: 50,
-                              activeBgColor: [Color.fromRGBO(249, 71, 108, 1)],
-                              inactiveBgColor: Color.fromRGBO(253, 213, 200, 1),
-                              initialLabelIndex: 0,
-                              totalSwitches: 3,
-                              labels: ['🙂', '😭', '😡'],
-                              onToggle: (index) {
-                                print('switched to: $index');
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    )
+
+                    SizedBox(height: 110,),
+
                   ],
                 ),
               ),
-            )
+            ),
+
+            Positioned(
+                bottom: 10 ,
+                right: 10,
+                left: 10,
+                child: Container(
+                  height: 90,
+                  width: 90,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const dash()),
+                          );
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          child: Container(
+                              decoration: BoxDecoration(shape: BoxShape.circle),
+                              child: Icon(Icons.home_filled,size: 40,color: Colors.white,)),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        child: Container(
+                            decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.white),
+                            child: Icon(CupertinoIcons.calendar_today,size: 40,color: Colors.black,)),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const profile()),
+                          );
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          child: Container(
+                              decoration: BoxDecoration(shape: BoxShape.circle,),
+                              child: Icon(CupertinoIcons.profile_circled,size: 40,color: Colors.white,)),
+                        ),
+                      )
+                    ],
+                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(60),color: Color.fromRGBO(236, 153, 153, 10)),
+                )
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: Container(
-          color: Color.fromRGBO(253, 213, 200, 1),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: GNav(
-              onTabChange: (value) {
-                print(value);
-              },
-              backgroundColor: Colors.transparent,
-              color: Color.fromRGBO(249, 71, 108, 1),
-              activeColor: Color.fromRGBO(249, 71, 108, 1),
-              tabBackgroundColor: Colors.grey.shade300,
-              padding: EdgeInsets.all(12),
-              tabs: [
-                GButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return dash();
-                        }));
-                  },
-                  icon: Icons.bar_chart,
-                  text: "Dashboard",
-                ),
-                GButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return calendar();
-                        }));
-                  },
-                  icon: Icons.calendar_month,
-                  text: "Calendar",
-                ),
-                GButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return notify();
-                        }));
-                  },
-                  icon: Icons.notifications_active,
-                  text: "Notifications",
-                ),
-                GButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return profile();
-                        }));
-                  },
-                  icon: Icons.person,
-                  text: "Profile",
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+
     );
   }
 }

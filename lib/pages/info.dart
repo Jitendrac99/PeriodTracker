@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:periods/pages/dashboard.dart';
+
 class info extends StatefulWidget {
   const info({super.key});
 
@@ -10,307 +14,252 @@ class _infoState extends State<info> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(253, 213, 200, 1),
-
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(253, 213, 200, 1),
-        title: Text("Information",
-          style: TextStyle(fontWeight: FontWeight.bold),),
-      ),
-
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 200,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Menstrual Cycle',
-                          style: TextStyle(fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.pink
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("A menstrual cycle is a natural, monthly process that occurs in the female reproductive system. It involves a series of hormonal changes and physiological events that prepare the body for a potential pregnancy. A period tracker app is a digital tool designed to help individuals monitor and manage their menstrual cycles.",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                ),
-
-              ),
-
-              SizedBox(height: 20),
-
-              Container(
-                height: 200,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'The Menstrual Cycle Unveiled:',
-                          style: TextStyle(fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.pink),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("The menstrual cycle is a natural, intricate process that the female body undergoes each month. On average, it spans approximately 28 days, although individual variations are entirely normal. Divided into distinct phases, the menstrual cycle is orchestrated by hormonal fluctuations that regulate various physiological changes within your body.",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                ),
-
-              ),
-              SizedBox(height: 20),
-
-              Container(
-                height: 180,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Menstruation (Days 1-5):',
-                          style: TextStyle(fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.pink),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("Your cycle begins with menstruation, commonly known as your period. The uterus sheds its lining, marking the start of a new cycle. Our app allows you to effortlessly log the start and end dates of your period, providing you with a comprehensive overview of your cycle.",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-
-                      ],
-                    ),
+      body: Container(
+        child: Stack(
+          children: [
+            Positioned(
+              top: 20,
+              left: 20,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const dash()),
+                  );
+                },
+                child: Container(
+                  height: 120,
+                  width: 40,
+                  child: Center(child: Icon(Icons.keyboard_backspace,color: Colors.white,)),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(236, 153, 153, 10),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
-                height: 200,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
+            ),
+            Positioned(
+              top: 140,
+              child: Container(
+                height: 760,
                 child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Follicular Phase (Days 6-14):',
-                          style: TextStyle(fontSize: 18,
-                              color: Colors.pink,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("Following menstruation, the body gears up for ovulation. Hormones stimulate the development of a follicle, which houses an egg. As estrogen levels rise, you may experience increased energy and a brighter mood. FemmeFlow helps you track these changes, fostering a deeper understanding of your unique cycle.",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
+                  child: Column(
+                    children: [
 
-                      ],
-                    ),
-                  ),
-                ),
+                      Container(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("What is Menstrual Cycle?",style: TextStyle(fontSize: 20,color: Colors.pink),),
+                        ),
+                      ),
+                      Container(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Expanded(
+                              child: Text("Periods are the regular shedding of the uterine lining that occurs in people with a uterus, typically happening once a month. This process is part of the menstrual cycle, which prepares the body for potential pregnancy.")),
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        width: 360,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top:60,
+                              left: 110,
+                              child: Container(
+                                height: 220,
+                                width: 220,
+                                decoration: BoxDecoration(shape: BoxShape.circle,color: Color.fromRGBO(236, 153, 153, 10)),
+                              ),
+                            ),
+                            Positioned(
+                              left: 30,
+                              top: 40,
+                              child: Container(
+                                height: 260,
+                                width: 190,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/images/canada.png"),
+                                        fit: BoxFit.cover
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Expanded(
+                              child: Text("Periods, or menstruation, are a natural and essential part of a girl's life. They signify the beginning of reproductive health and play a crucial role in the menstrual cycle, which prepares the body for potential pregnancy. Menstruation typically begins between the ages of 9 and 16, with most girls getting their first period around age 12. This first period, known as menarche, marks the onset of puberty and is influenced by factors like genetics, nutrition, and overall health.")),
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        width: 360,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: 80,
+                              top: 40,
+                              child: Container(
+                                height: 260,
+                                width: 190,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/images/cramp.png"),
+                                        fit: BoxFit.cover
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Expanded(
+                              child: Text("Many girls experience menstrual cramps, or dysmenorrhea, during their periods. These cramps are caused by the contraction of the uterine muscles as the body sheds the uterine lining. While cramps can be uncomfortable, they are a normal part of the menstrual process. To manage cramps, you can try applying heat with a heating pad or hot water bottle on your lower abdomen. Staying active with light exercise, such as walking or yoga, can also help relieve pain. Hydration and proper nutrition play a role in easing symptoms, so drinking plenty of water and eating a balanced diet rich in fruits, vegetables, and whole grains is beneficial. Over-the-counter pain relief medications like ibuprofen can help alleviate severe cramps if needed.")),
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        width: 360,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top:60,
+                              left: 110,
+                              child: Container(
+                                height: 220,
+                                width: 220,
+                                decoration: BoxDecoration(shape: BoxShape.circle,color: Color.fromRGBO(236, 153, 153, 10)),
+                              ),
+                            ),
+                            Positioned(
+                              left: 30,
+                              top: 40,
+                              child: Container(
+                                height: 260,
+                                width: 190,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/images/eat.png"),
+                                        fit: BoxFit.cover
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Expanded(
+                              child: Text("Adopting healthy habits can significantly improve your menstrual experience and overall well-being. Regular exercise boosts mood and energy levels, and can help regulate your cycle. Eating a variety of nutritious foods supports hormonal balance and reduces bloating and fatigue. Staying hydrated helps reduce bloating and flushes out toxins. Getting adequate sleep is essential for managing stress and maintaining hormonal health. Stress management practices like meditation, deep breathing, and engaging in hobbies can also reduce stress and its impact on your cycle.")),
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        width: 360,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top:50,
+                              left: 80,
+                              child: Container(
+                                height: 240,
+                                width: 240,
+                                decoration: BoxDecoration(shape: BoxShape.circle,color: Color.fromRGBO(236, 153, 153, 10)),
+                              ),
+                            ),
+                            Positioned(
+                              left: 90,
+                              top: 40,
+                              child: Container(
+                                height: 260,
+                                width: 190,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/images/selflove.png"),
+                                        fit: BoxFit.cover
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-              ),
-              SizedBox(height: 20,),
+                      Container(
+                        width: 340,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Expanded(
+                              child: Text("Understanding and embracing your menstrual cycle is empowering. It's a natural process that reflects your body's health and reproductive capability. Tracking your periods can help you predict future cycles, manage symptoms, monitor health, and plan for pregnancy or contraception. Knowing when to expect your period helps in planning and reducing surprises. By tracking symptoms, you can find patterns and better manage discomfort. Irregularities in your cycle can signal health issues, so tracking helps you stay informed and proactive about your health. Whether you're trying to conceive or avoid pregnancy, understanding your cycle is crucial.")),
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        width: 360,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top:50,
+                              left: 80,
+                              child: Container(
+                                height: 240,
+                                width: 240,
+                                decoration: BoxDecoration(shape: BoxShape.circle,color: Color.fromRGBO(236, 153, 153, 10)),
+                              ),
+                            ),
+                            Positioned(
+                              left: 90,
+                              top: 80,
+                              child: Container(
+                                height: 200,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/images/bath.png"),
+                                        fit: BoxFit.cover
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-              Container(
-                height: 170,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Ovulation (Around Day 14):',
-                          style: TextStyle(fontSize: 18,
-                              color: Colors.pink,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
+                      Container(
+                        width: 340,
+                        child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("Ovulation is the pivotal moment when a mature egg is released from the ovary, poised for fertilization. This phase is marked by heightened fertility. Our app provides predictive insights into your ovulation window, aiding in family planning or contraception",
-                            textAlign: TextAlign.justify,
-                          ),
+                          child: Expanded(
+                              child: Text("It's essential to consult a healthcare provider if you experience very heavy bleeding that requires changing your pad or tampon every hour, severe pain that isn't relieved by over-the-counter medication, irregular cycles with periods that are more than 35 days apart or unusually close together, missed periods for more than three consecutive months without pregnancy, or any other symptoms that seem unusual or troubling. By understanding your menstrual cycle and adopting healthy habits, you can make informed decisions about your reproductive health. Our Period Tracker App is here to support you every step of the way, offering insights, reminders, and personalized tips to help you manage your cycle with confidence and ease.")),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 100,
+                      )
+
+                    ],
                   ),
                 ),
               ),
-              SizedBox(height:20,),
-              Container(
-                height: 200,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Luteal Phase (Days 15-28):',
-                          style: TextStyle(fontSize: 18,
-                              color: Colors.pink,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("Post-ovulation, the body enters the luteal phase. The ruptured follicle transforms into a structure called the corpus luteum, releasing progesterone. This hormone prepares the uterus for a potential pregnancy. Users can log symptoms and mood changes during this phase, enhancing their awareness of premenstrual patterns",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height:20,),
-              Container(
-                height: 440,
-                width: 400,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.pinkAccent,
-                      )
-                    ],
-                    color: Color.fromRGBO(250, 242, 232, 1),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Key Features of FemmeFlow',
-                          style: TextStyle(fontSize: 18,
-                              color: Colors.pink,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Text("1. Effortless Tracking: Seamlessly log your daily experiences, symptoms, mood, and activities, all within the sleek and intuitive FemmeFlow interface.",
-                                textAlign: TextAlign.justify,),
-                              SizedBox(height: 10),
-                              Text("2. Cycle Predictions: Receive accurate predictions about your upcoming menstrual cycles, ovulation, and fertile windows.",
-                                textAlign: TextAlign.justify,),
-                              SizedBox(height: 10,),
-                              Text("3. Informative Insights: Gain valuable insights into your unique patterns, helping you anticipate changes and plan accordingly.",
-                                textAlign: TextAlign.justify,),
-                              SizedBox(height: 10,),
-                              Text("4. Gentle Reminders: Set discreet reminders for period days, ovulation, and other customizable events. FemmeFlow keeps you connected to your body's rhythm without being intrusive.",
-                                textAlign: TextAlign.justify,),
-                              SizedBox(height: 10,),
-                              Text("5. Secure & Private: Trust FemmeFlow with your most personal information. We prioritize the security and privacy of your data, ensuring your journey is safe and confidential.",
-                                textAlign: TextAlign.justify,),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            )
+          ],
+
         ),
       ),
     );
